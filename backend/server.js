@@ -19,6 +19,4 @@ app.get("/profile", authenticateToken, (req, res) => {
   res.json({ message: `Hello ${req.user.username}` });
 });
 
-// Start server
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Auth server running on http://localhost:${PORT}`));
+export default app;
