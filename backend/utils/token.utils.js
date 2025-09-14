@@ -12,4 +12,4 @@ function generateRefreshToken(user) {
   });
 }
 
-export { generateAccessToken, generateRefreshToken }
+export { generateAccessToken, generateRefreshToken };
