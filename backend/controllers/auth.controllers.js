@@ -1,9 +1,12 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import users from "../models/user.models.js";
-import jwt from "jsonwebtoken"
-import logger from "../utils/logger.js"
+import logger from "../utils/logger.js";
 
-import { generateAccessToken, generateRefreshToken } from "../utils/token.utils.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/token.utils.js";
 
 async function registerUser(req, res) {
   const { username, password } = req.body;
@@ -14,7 +17,7 @@ async function registerUser(req, res) {
   const newUser = { id: users.length + 1, username, password: hashedPassword };
   users.push(newUser);
 
-  logger.info("User created", {username});
+  logger.info("User created", { username });
   res.json({ message: "User created" });
 }
 
@@ -22,7 +25,7 @@ async function loginUser(req, res) {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    logger.error("Failed login attempt", {username});
+    logger.error("Failed login attempt", { username });
     return res.status(401).json({ message: "Invalid credentials" });
   }
   const accessToken = generateAccessToken(user);
