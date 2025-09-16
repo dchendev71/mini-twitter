@@ -1,13 +1,20 @@
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function generateAccessToken(user) {
-  jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
-  });
+  return jwt.sign(
+    { id: user.id, username: user.username },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "15m",
+    },
+  );
 }
 
 function generateRefreshToken(user) {
-  jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, {
+  return jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, {
     expiresIn: "7d",
   });
 }

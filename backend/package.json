@@ -35,7 +35,14 @@
     "supertest": "^7.1.4"
   },
   "jest": {
-    "testEnvironment": "node",
-    "transform": {}
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "controllers/**/*.js",
+    "routes/**/*.js",
+    "utils/**/*.js",
+    "middleware/**/*.js"
+  ],
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov"]
   }
 }
