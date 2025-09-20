@@ -8,11 +8,16 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "start": "node index.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "dev": "nodemon index.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:studio": "prisma studio"
   },
   "author": "David Chen",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.16.2",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
@@ -32,17 +37,21 @@
     "globals": "^16.4.0",
     "jest": "^30.1.3",
     "prettier": "^3.6.2",
+    "prisma": "^6.16.2",
     "supertest": "^7.1.4"
   },
   "jest": {
-  "collectCoverage": true,
-  "collectCoverageFrom": [
-    "controllers/**/*.js",
-    "routes/**/*.js",
-    "utils/**/*.js",
-    "middleware/**/*.js"
-  ],
-  "coverageDirectory": "coverage",
-  "coverageReporters": ["text", "lcov"]
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "controllers/**/*.js",
+      "routes/**/*.js",
+      "utils/**/*.js",
+      "middleware/**/*.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ]
   }
 }
