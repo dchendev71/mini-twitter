@@ -1,45 +1,76 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import users from "../models/user.models.js";
 import logger from "../utils/logger.js";
+import prisma from "../prismaClient.js"
 
 import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/token.utils.js";
 
+
 async function registerUser(req, res) {
-  const { username, password } = req.body;
-  if (users.find((u) => u.username === username)) {
-    return res.status(400).json({ message: "Username already exists" });
+  const { username, password, email } = req.body;
+ 
+  if (!username || !password || !email) {
+    return res.status(400).json({ message: "username, password and email required"});
   }
+
+  if (await checkIfUserExists(username, email)) {
+    return res.status(400).json({ message: "Username or email already in use"});
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = { id: users.length + 1, username, password: hashedPassword };
-  users.push(newUser);
+  const user = await prisma.user.create({
+    data: {
+      username,
+      email,
+      password: hashedPassword
+    }
+  });
 
   logger.info("User created", { username });
-  res.json({ message: "User created" });
+
+  return res.json({
+    message: "User created",
+    user: { id: user.id, username: user.username, email: user.email }
+  })
+}
+
+async function checkIfUserExists(username, email) {
+  if (await prisma.user.findUnique({where: { username } })) {
+    return true;
+  }
+  if (await prisma.user.findUnique({where: { email } })) {
+    return true;
+  }
+
+  return false
 }
 
 async function loginUser(req, res) {
   const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
-  if (!user || !(await bcrypt.compare(password, user.password))) {
+  if (!username || !password) {
+    return res.status(400).json({ message: "username and password required"});
+  }
+  const user = await prisma.user.findUnique({ where: { username }})
+  if (!user|| !await bcrypt.compare(password, user.password)) {
+    // We do not want to tell them that the user does not exist
     logger.error("Failed login attempt", { username });
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res.status(401).json({ message: "Invalid credentials"})
   }
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
-  res.json({ accessToken, refreshToken });
+  return res.json({ accessToken, refreshToken });
 }
 
 function refreshToken(req, res) {
   const { refreshToken } = req.body;
   if (!refreshToken) return res.sendStatus(401);
-  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => {
+  jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, payload) => {
     if (err) return res.sendStatus(403);
-    const newAccessToken = generateAccessToken(user);
-    res.json({ accessToken: newAccessToken });
+    const newAccessToken = generateAccessToken({ id: payload.id, username: payload.username });
+    return res.json({ accessToken: newAccessToken });
   });
 }
 

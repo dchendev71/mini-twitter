@@ -2,9 +2,18 @@ import request from "supertest";
 import app from "../server.js"; // export app from server.js
 
 const USERNAME = "testuser";
+const PASSWORD = "testpwd"
+const EMAIL = "testuser@test.com"
+
+const bodyWithEmail = {
+  username: USERNAME,
+  password: PASSWORD,
+  email: EMAIL
+};
+
 const body = {
   username: USERNAME,
-  password: "pass123",
+  password: PASSWORD
 };
 
 async function getResponse(route, body) {
@@ -13,14 +22,14 @@ async function getResponse(route, body) {
 
 describe("Auth Routes", () => {
   it("should register a user", async () => {
-    const res = await getResponse("/auth/register", body);
+    const res = await getResponse("/auth/register", bodyWithEmail);
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty("message", "User created");
   });
 
   it("should not register same username twice", async () => {
-    const res = await getResponse("/auth/register", body);
+    const res = await getResponse("/auth/register", bodyWithEmail);
 
     expect(res.statusCode).toBe(400);
   });
@@ -40,7 +49,7 @@ describe("Auth Routes", () => {
   it("should fail login", async () => {
     const res = await getResponse("/auth/login", {
       username: USERNAME,
-      password: "pass1234",
+      password: PASSWORD + "123",
     });
     expect(res.statusCode).toBe(401);
     expect(res.body).toHaveProperty("message", "Invalid credentials");
