@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String  @unique
+  password   String
+  bio        String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  posts      Post[]
+  followers  Follow[] @relation("followees")
+  following  Follow[] @relation("followers")
+  likes      Like[]
+}
+
+model Post {
+  id            Int      @id @default(autoincrement())
+  authorId      Int
+  author        User     @relation(fields: [authorId], references: [id])
+  text          String?  @db.VarChar(280)
+  attachments   Json?
+  retweetOfId   Int? 
+  retweetOf     Post?    @relation("PostRetweets", fields: [retweetOfId], references: [id])
+  retweets      Post[]   @relation("PostRetweets") // inverse side
+  likesCount    Int      @default(0)
+  retweetsCount Int      @default(0)
+  createdAt     DateTime @default(now())
+  likes         Like[]
+
+  @@index([authorId, createdAt])
+  @@unique([authorId, retweetOfId])
+}
+
+
+model Follow {
+  followerId Int
+  followeeId Int
+  createdAt  DateTime @default(now())
+
+  follower User @relation("followers", fields: [followerId], references: [id])
+  followee User @relation("followees", fields: [followeeId], references: [id])
+
+  @@id([followerId, followeeId])
+  @@index([followeeId])
+}
+
+model Like {
+  userId Int
+  postId Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  @@id([userId, postId])
+}
