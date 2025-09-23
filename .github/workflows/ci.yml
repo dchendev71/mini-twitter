@@ -50,6 +50,9 @@ jobs:
           until pg_isready -h localhost -p 5432; do
             echo "Waiting for Postgres..."; sleep 1;
           done
+      - name: Debug DATABASE_URL
+        run: |
+          echo "DATABASE_URL=$DATABASE_URL"
       
       - name: Generate Prisma Client
         run: npx prisma generate
