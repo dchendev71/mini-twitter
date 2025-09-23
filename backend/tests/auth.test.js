@@ -1,4 +1,5 @@
 import request from "supertest";
+import jwt from "jsonwebtoken";
 import app from "../server.js"; // export app from server.js
 
 const USERNAME = "testuser";
@@ -137,4 +138,35 @@ describe("Auth Routes", () => {
 
     expect(refreshResponse.statusCode).toBe(403);
   });
+});
+
+describe("authenticateToken middleware", () => {
+  it("should return 401 if no token is provided", async () => {
+    const res = await request(app).get("/profile")
+
+    expect(res.statusCode).toBe(401)
+  });
+
+  it("should return 403 if token is invalid", async () => {
+    const res = await request(app)
+      .get("/profile")
+      .set("Authorization", "Bearer invalid.token.here");
+
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("should allow access if token is valid", async () => {
+    const validToken = jwt.sign(
+      { id: 1, username: USERNAME },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    const res = await request(app)
+      .get("/profile")
+      .set("Authorization", `Bearer ${validToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty("message", `Hello ${USERNAME}`);
+  })
 });
