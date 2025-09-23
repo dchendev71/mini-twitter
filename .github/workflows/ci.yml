@@ -29,7 +29,8 @@ jobs:
           - 5432:5432
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mini_twitter_test?schema=public
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mini_twitter_dev?schema=public
+      DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/mini_twitter_test?schema=public
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
 
@@ -50,9 +51,6 @@ jobs:
           until pg_isready -h localhost -p 5432; do
             echo "Waiting for Postgres..."; sleep 1;
           done
-      - name: Debug DATABASE_URL
-        run: |
-          echo "DATABASE_URL=$DATABASE_URL"
       
       - name: Generate Prisma Client
         run: npx prisma generate
