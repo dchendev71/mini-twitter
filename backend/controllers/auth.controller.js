@@ -47,7 +47,6 @@ async function checkIfUserExists(username, email) {
   if (await prisma.user.findUnique({ where: { email } })) {
     return true;
   }
-
   return false;
 }
 

@@ -3,7 +3,7 @@ import {
   registerUser,
   loginUser,
   refreshToken,
-} from "../controllers/auth.controllers.js";
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
