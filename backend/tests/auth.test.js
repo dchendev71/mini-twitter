@@ -1,10 +1,8 @@
 import request from "supertest";
 import jwt from "jsonwebtoken";
 import app from "../server.js"; // export app from server.js
-
-const USERNAME = "testuser";
-const PASSWORD = "testpwd";
-const EMAIL = "testuser@test.com";
+import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
+import { clearDatabase } from "./clearDatabase.js";
 
 const bodyWithEmail = {
   username: USERNAME,
@@ -20,6 +18,10 @@ const body = {
 async function getResponse(route, body) {
   return request(app).post(route).send(body);
 }
+
+beforeAll(async() => {
+  await clearDatabase();
+});
 
 describe("Auth Routes", () => {
   it("should fail registering user, missing email", async () => {
