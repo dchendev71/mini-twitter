@@ -8,3 +8,4 @@ export async function clearDatabase() {
   await prisma.user.deleteMany();         // Users last
   // Add other models here if needed
 }
+
