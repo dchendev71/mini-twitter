@@ -6,4 +6,4 @@ const USERNAME = "testuser";
 const PASSWORD = "testpwd";
 const EMAIL = "testuser@test.com";
 
-export { USERNAME, PASSWORD, EMAIL }
+export { USERNAME, PASSWORD, EMAIL };

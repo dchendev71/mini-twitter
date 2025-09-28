@@ -19,7 +19,7 @@ async function getResponse(route, body) {
   return request(app).post(route).send(body);
 }
 
-beforeAll(async() => {
+beforeAll(async () => {
   await clearDatabase();
 });
 
@@ -144,9 +144,9 @@ describe("Auth Routes", () => {
 
 describe("authenticateToken middleware", () => {
   it("should return 401 if no token is provided", async () => {
-    const res = await request(app).get("/profile")
+    const res = await request(app).get("/profile");
 
-    expect(res.statusCode).toBe(401)
+    expect(res.statusCode).toBe(401);
   });
 
   it("should return 403 if token is invalid", async () => {
@@ -161,7 +161,7 @@ describe("authenticateToken middleware", () => {
     const validToken = jwt.sign(
       { id: 1, username: USERNAME },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "15m" },
     );
 
     const res = await request(app)
@@ -170,5 +170,5 @@ describe("authenticateToken middleware", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty("message", `Hello ${USERNAME}`);
-  })
+  });
 });
