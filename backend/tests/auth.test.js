@@ -2,7 +2,7 @@ import request from "supertest";
 import jwt from "jsonwebtoken";
 import app from "../server.js"; // export app from server.js
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
-import { clearDatabase } from "./clearDatabase.js";
+import { clearDatabase } from "./testsUtils.js";
 
 const bodyWithEmail = {
   username: USERNAME,
