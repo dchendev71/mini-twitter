@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/posts", postRoutes);
-app.use("/follow", followRoutes)
+app.use("/follow", followRoutes);
 
 // Example protected route
 app.get("/profile", authenticateToken, (req, res) => {
