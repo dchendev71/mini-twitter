@@ -1,9 +1,9 @@
-import request from "supertest";
 import app from "../server.js";
 import prisma from "../prismaClient.js";
 import jwt from "jsonwebtoken";
+import request from "supertest";
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
-import { clearDatabase, sendPostAuthorizedRequest } from "./testsUtils.js";
+import { clearDatabase, sendAuthorizedRequest } from "./testsUtils.js";
 
 let token;
 let user;
@@ -24,14 +24,19 @@ beforeAll(async () => {
 
 describe("POST /posts", () => {
   it("should create a post when authenticated", async () => {
-    const res = await sendPostAuthorizedRequest("/posts", token, "Hello World");
+    const res = await sendAuthorizedRequest(
+      "POST",
+      "/posts",
+      token,
+      "Hello World",
+    );
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty("message", "post created succesfully");
   });
 
   it("should return 403 if content is empty", async () => {
-    const res = await sendPostAuthorizedRequest("/posts", token, "");
+    const res = await sendAuthorizedRequest("POST", "/posts", token, "");
     expect(res.statusCode).toBe(403);
   });
 
@@ -41,7 +46,12 @@ describe("POST /posts", () => {
   });
 
   it("should return 500 because content is not an string", async () => {
-    const res = await sendPostAuthorizedRequest("/posts", token, 12312421312);
+    const res = await sendAuthorizedRequest(
+      "POST",
+      "/posts",
+      token,
+      12312421312,
+    );
     expect(res.statusCode).toBe(500);
   });
 });

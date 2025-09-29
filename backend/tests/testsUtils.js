@@ -4,26 +4,25 @@ import app from "../server.js";
 import jwt from "jsonwebtoken";
 import request from "supertest";
 
-
 async function createUsersAndReturnAccessTokens(amount) {
-  const accessTokens = []
+  const accessTokens = [];
   for (let user = 0; user < amount; user++) {
-    const username = USERNAME + user.toString()
+    const username = USERNAME + user.toString();
     const created = await prisma.user.create({
       data: {
         username: username,
         password: PASSWORD,
-        email: EMAIL + user.toString()
-      }
-    })
+        email: EMAIL + user.toString(),
+      },
+    });
     const token = jwt.sign(
-    { id: created.id, username: created.username },
-    process.env.JWT_SECRET,
-    { expiresIn: "15m" },
-  );
-    accessTokens.push(token)
+      { id: created.id, username: created.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" },
+    );
+    accessTokens.push({ token: token, user: created });
   }
-  return accessTokens
+  return accessTokens;
 }
 
 async function clearDatabase() {
@@ -42,4 +41,29 @@ async function sendPostAuthorizedRequest(route, token, text) {
     .send({ content: text });
 }
 
-export { clearDatabase, createUsersAndReturnAccessTokens, sendPostAuthorizedRequest}
+async function sendDeleteAuthorizedRequest(route, token, text) {
+  return await request(app)
+    .del(route)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ content: text });
+}
+
+async function sendAuthorizedRequest(method, route, token, text) {
+  switch (method) {
+    case "POST":
+      return sendPostAuthorizedRequest(route, token, text);
+    case "DELETE":
+      return sendDeleteAuthorizedRequest(route, token, text);
+    case "GET":
+      throw new Error("Not Implemented");
+    case "UPDATE":
+      throw new Error("Not Implemented");
+  }
+  throw new Error("Not Implemented");
+}
+
+export {
+  clearDatabase,
+  createUsersAndReturnAccessTokens,
+  sendAuthorizedRequest,
+};
