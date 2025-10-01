@@ -4,6 +4,9 @@ import {
   sendAuthorizedRequest,
 } from "./testsUtils.js";
 
+import request from "supertest";
+import app from "../server.js";
+
 let users;
 const USER_COUNT = 10;
 
@@ -129,5 +132,21 @@ describe("Follow routes", () => {
       );
       expect(res.statusCode).toBe(201);
     }
+  });
+
+  it("should list all followers", async () => {
+    const user = users[0]["user"];
+    const res = await request(app).get(`/follow/${user.id}/following`);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveLength(USER_COUNT - 1);
+  });
+
+  it("should list all followee", async () => {
+    const user = users[0]["user"];
+    const res = await request(app).get(`/follow/${user.id}/followers`);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveLength(0);
   });
 });
