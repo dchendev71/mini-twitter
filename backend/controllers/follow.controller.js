@@ -51,4 +51,24 @@ async function unfollow(req, res) {
   }
 }
 
-export { unfollow, follow };
+async function getFollowers(req, res) {
+  const userId = parseInt(req.params.userId, 10);
+  const followers = await prisma.follow.findMany({
+    where: { followeeId: userId },
+    include: { follower: true },
+  });
+
+  return res.status(201).json(followers.map((f) => f.follower));
+}
+
+async function getFollowing(req, res) {
+  const userId = parseInt(req.params.userId, 10);
+  const following = await prisma.follow.findMany({
+    where: { followerId: userId },
+    include: { followee: true },
+  });
+
+  return res.status(201).json(following.map((f) => f.followee));
+}
+
+export { unfollow, follow, getFollowers, getFollowing };
