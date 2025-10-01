@@ -1,4 +1,4 @@
-import prisma from "../prismaClient.js";
+import prisma from "../src/prismaClient.js";
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
 import app from "../server.js";
 import jwt from "jsonwebtoken";

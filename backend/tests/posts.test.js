@@ -1,5 +1,5 @@
 import app from "../server.js";
-import prisma from "../prismaClient.js";
+import prisma from "../src/prismaClient.js";
 import jwt from "jsonwebtoken";
 import request from "supertest";
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
