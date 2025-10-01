@@ -1,4 +1,4 @@
-import prisma from "../prismaClient.js";
+import prisma from "../../prismaClient.js";
 import logger from "../utils/logger.js";
 
 async function createPost(req, res) {

@@ -2,11 +2,11 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth.routes.js";
-import postRoutes from "./routes/posts.routes.js";
-import followRoutes from "./routes/follow.routes.js";
+import authRoutes from "./src/routes/auth.routes.js";
+import postRoutes from "./src/routes/posts.routes.js";
+import followRoutes from "./src/routes/follow.routes.js";
 
-import { authenticateToken } from "./middleware/auth.middleware.js";
+import { authenticateToken } from "./src/middleware/auth.middleware.js";
 
 dotenv.config();
 
