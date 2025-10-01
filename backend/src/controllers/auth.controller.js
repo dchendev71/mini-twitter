@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import logger from "../utils/logger.js";
-import prisma from "../prismaClient.js";
+import prisma from "../../prismaClient.js";
 
 import {
   generateAccessToken,
