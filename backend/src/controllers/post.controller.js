@@ -1,5 +1,9 @@
 import prisma from "../prismaClient.js";
 import logger from "../utils/logger.js";
+import redis from "../redisClient.js";
+import { fanoutQueue } from "../queues/fanoutQueue.js";
+
+const REDIS_POST_PATH = "user:posts:";
 
 async function createPost(req, res) {
   try {
@@ -18,6 +22,16 @@ async function createPost(req, res) {
       },
     });
 
+    const ts = Date.now();
+
+    await redis.zadd(REDIS_POST_PATH + `${req.user.id}`, ts, post.id);
+
+    await fanoutQueue.add("fanoutPost", {
+      postId: post.id,
+      authorId: req.user.id,
+      ts,
+    });
+
     return res.status(201).json({
       message: "post created succesfully",
       post,
@@ -30,4 +44,44 @@ async function createPost(req, res) {
   }
 }
 
-export { createPost };
+async function getTimeline(req, res) {
+  try {
+    const userId = req.user.id;
+    const limit = Math.min(20, Number(req.query.limit) || 10);
+
+    const ids = await redis.zrevrange(
+      REDIS_POST_PATH + `${userId}`,
+      0,
+      limit - 1,
+    );
+
+    let posts = [];
+    if (ids.length > 0) {
+      posts = await prisma.post.findMany({
+        where: {
+          id: {
+            in: ids.map(Number),
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } else {
+      posts = await prisma.post.findMany({
+        where: {
+          authorId: userId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: limit,
+      });
+    }
+    return res.status(201).json({ posts });
+  } catch (err) {
+    logger.error("Error fetching timeline:", err);
+    return res.status(500).json({ error: "Could not fetch timeline" });
+  }
+}
+export { createPost, getTimeline };
