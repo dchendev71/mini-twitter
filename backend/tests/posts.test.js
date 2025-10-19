@@ -1,4 +1,4 @@
-import app from "../server.js";
+import { app } from "./setupTests.js";
 import prisma from "../src/prismaClient.js";
 import jwt from "jsonwebtoken";
 import request from "supertest";

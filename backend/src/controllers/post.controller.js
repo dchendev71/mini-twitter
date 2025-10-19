@@ -1,7 +1,5 @@
 import prisma from "../prismaClient.js";
 import logger from "../utils/logger.js";
-import redis from "../redisClient.js";
-import { fanoutQueue } from "../queues/fanoutQueue.js";
 
 const REDIS_POST_PATH = "user:posts:";
 
@@ -23,6 +21,10 @@ async function createPost(req, res) {
     });
 
     const ts = Date.now();
+
+    console.log(req.app.locals.fanoutQueue)
+    const redis = req.app.locals.redis;
+    const fanoutQueue = req.app.locals.fanoutQueue;
 
     await redis.zadd(REDIS_POST_PATH + `${req.user.id}`, ts, post.id);
 
@@ -49,6 +51,7 @@ async function getTimeline(req, res) {
     const userId = req.user.id;
     const limit = Math.min(20, Number(req.query.limit) || 10);
 
+    const redis = req.app.locals.redis;
     const ids = await redis.zrevrange(
       REDIS_POST_PATH + `${userId}`,
       0,

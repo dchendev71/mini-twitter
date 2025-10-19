@@ -1,18 +1,22 @@
 import { Worker } from "bullmq";
-import redis from "../redisClient.js";
+import { getRedis } from "../redisClient";
 
-const fanoutWorker = new Worker(
-  "fanout",
-  async (job) => {
-    console.log("Received job:", job.name, job.data);
-    // Sprint A: only log
-  },
-  { connection: redis },
-);
+let workerInstance = null;
 
-fanoutWorker.on("completed", (job) => console.log(`Job ${job.id} completed`));
-fanoutWorker.on("failed", (job, err) =>
-  console.error(`Job ${job?.id} failed:`, err),
-);
+export function getFanoutWorker(processFn) {
+  if (!workerInstance) {
+    workerInstance = new Worker(
+      "fanoutQueue",
+      processFn,
+      { connection: getRedis() }
+    );
+  }
+  return workerInstance;
+}
 
-export { fanoutWorker };
+export async function closeFanoutWorker() {
+  if (workerInstance) {
+    await workerInstance.close();
+    workerInstance = null;
+  }
+}
