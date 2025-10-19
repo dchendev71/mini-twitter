@@ -1,8 +1,12 @@
 import prisma from "../src/prismaClient.js";
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
-import app from "../server.js";
+import createApp from "../app.js";
 import jwt from "jsonwebtoken";
 import request from "supertest";
+import { getRedis } from "../src/redisClient.js";
+import { getFanoutQueue } from "../src/queues/fanoutQueue.js";
+import { getFanoutWorker } from "../src/workers/fanoutWorker.js";
+import { app } from "./setupTests.js"
 
 async function createUsersAndReturnAccessTokens(amount) {
   const accessTokens = [];
@@ -62,8 +66,16 @@ async function sendAuthorizedRequest(method, route, token, text) {
   throw new Error("Not Implemented");
 }
 
+function createAppInstance() {
+  return createApp({
+    redis: getRedis(),
+    fanoutQueue: getFanoutQueue(),
+    fanoutWorker: getFanoutWorker(),
+  })
+}
 export {
   clearDatabase,
   createUsersAndReturnAccessTokens,
   sendAuthorizedRequest,
+  createAppInstance
 };

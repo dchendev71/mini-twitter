@@ -1,18 +1,24 @@
-import dotenv from "dotenv";
-import redis from "../src/redisClient";
-import { fanoutQueue } from "../src/queues/fanoutQueue";
-import { fanoutWorker } from "../src/workers/fanoutWorker";
 
-dotenv.config();
+import { closeRedis } from "../src/redisClient.js";
+import { closeFanoutQueue } from "../src/queues/fanoutQueue.js";
+import { closeFanoutWorker } from "../src/workers/fanoutWorker.js";
+import { createAppInstance } from "./testsUtils.js";
+
+let app
+
+beforeAll(async () => {
+  app = createAppInstance()  
+})
+
+afterAll(async () => {
+  await closeFanoutWorker();
+  await closeFanoutQueue();
+  await closeRedis();
+});
 
 const USERNAME = "testuser";
 const PASSWORD = "testpwd";
 const EMAIL = "testuser@test.com";
 
-afterAll(async () => {
-  await redis.quit();
-  await fanoutQueue.close();
-  await fanoutWorker.close();
-});
 
-export { USERNAME, PASSWORD, EMAIL };
+export { USERNAME, PASSWORD, EMAIL, app };

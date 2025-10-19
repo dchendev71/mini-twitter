@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --detectOpenHandles",
     "start": "node index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

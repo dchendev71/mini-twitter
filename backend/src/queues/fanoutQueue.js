@@ -1,4 +1,20 @@
 import { Queue } from "bullmq";
-import redis from "../redisClient.js";
+import { getRedis } from "../redisClient";
 
-export const fanoutQueue = new Queue("fanout", { connection: redis });
+let queueInstance = null;
+
+export function getFanoutQueue() {
+  if (!queueInstance) {
+    queueInstance = new Queue("fanoutQueue", {
+      connection: getRedis(), // inject Redis
+    });
+  }
+  return queueInstance;
+}
+
+export async function closeFanoutQueue() {
+  if (queueInstance) {
+    await queueInstance.close();
+    queueInstance = null;
+  }
+}

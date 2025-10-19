@@ -3,9 +3,8 @@ import {
   createUsersAndReturnAccessTokens,
   sendAuthorizedRequest,
 } from "./testsUtils.js";
-
+import { app } from "./setupTests.js"
 import request from "supertest";
-import app from "../server.js";
 
 let users;
 const USER_COUNT = 10;
