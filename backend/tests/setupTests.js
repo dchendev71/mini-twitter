@@ -1,8 +1,16 @@
 
-import { closeRedis } from "../src/redisClient.js";
-import { closeFanoutQueue } from "../src/queues/fanoutQueue.js";
-import { closeFanoutWorker } from "../src/workers/fanoutWorker.js";
-import { createAppInstance } from "./testsUtils.js";
+import { getRedis, closeRedis } from "../src/redisClient.js";
+import { getFanoutQueue, closeFanoutQueue } from "../src/queues/fanoutQueue.js";
+import { getFanoutWorker, closeFanoutWorker } from "../src/workers/fanoutWorker.js";
+import createApp from "../app.js";
+
+function createAppInstance() {
+  return createApp({
+    redis: getRedis(),
+    fanoutQueue: getFanoutQueue(),
+    fanoutWorker: getFanoutWorker(),
+  })
+}
 
 let app
 
