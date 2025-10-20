@@ -7,8 +7,6 @@ import postRoutes from "./src/routes/posts.routes.js";
 import followRoutes from "./src/routes/follow.routes.js";
 
 import { authenticateToken } from "./src/middleware/auth.middleware.js";
-import { getFanoutQueue } from "./src/queues/fanoutQueue.js";
-import { getFanoutWorker } from "./src/workers/fanoutWorker.js";
 
 dotenv.config();
 

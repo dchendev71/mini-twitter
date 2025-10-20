@@ -22,7 +22,6 @@ async function createPost(req, res) {
 
     const ts = Date.now();
 
-    console.log(req.app.locals.fanoutQueue)
     const redis = req.app.locals.redis;
     const fanoutQueue = req.app.locals.fanoutQueue;
 
@@ -57,7 +56,6 @@ async function getTimeline(req, res) {
       0,
       limit - 1,
     );
-
     let posts = [];
     if (ids.length > 0) {
       posts = await prisma.post.findMany({
@@ -87,4 +85,4 @@ async function getTimeline(req, res) {
     return res.status(500).json({ error: "Could not fetch timeline" });
   }
 }
-export { createPost, getTimeline };
+export { createPost, getTimeline, REDIS_POST_PATH };
