@@ -41,13 +41,12 @@ async function registerUser(req, res) {
 }
 
 async function checkIfUserExists(username, email) {
-  if (await prisma.user.findUnique({ where: { username } })) {
-    return true;
-  }
-  if (await prisma.user.findUnique({ where: { email } })) {
-    return true;
-  }
-  return false;
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ username }, { email }],
+    },
+  });
+  return !!user;
 }
 
 async function loginUser(req, res) {
