@@ -5,11 +5,9 @@ let workerInstance = null;
 
 export function getFanoutWorker(processFn) {
   if (!workerInstance) {
-    workerInstance = new Worker(
-      "fanoutQueue",
-      processFn,
-      { connection: getRedis() }
-    );
+    workerInstance = new Worker("fanoutQueue", processFn, {
+      connection: getRedis(),
+    });
   }
   return workerInstance;
 }

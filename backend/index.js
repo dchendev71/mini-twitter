@@ -7,8 +7,10 @@ import { getFanoutWorker } from "./src/workers/fanoutWorker.js";
 const PORT = process.env.PORT || 4000;
 
 const app = createApp({
-  redis: getRedis(), fanoutQueue: getFanoutQueue(), fanoutWorker: getFanoutWorker(),
-})
+  redis: getRedis(),
+  fanoutQueue: getFanoutQueue(),
+  fanoutWorker: getFanoutWorker(),
+});
 app.listen(PORT, () =>
   console.log(`Auth server running on http://localhost:${PORT}`),
 );
