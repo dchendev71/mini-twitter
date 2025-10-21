@@ -13,7 +13,6 @@ export function getRedis() {
     });
 
     redisInstance.on("connect", () => console.log("Redis connected"));
-    redisInstance.on("close", () => console.log("Redis closing"));
     redisInstance.on("error", (err) => console.error("Redis error", err));
   }
 
