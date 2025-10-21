@@ -58,24 +58,25 @@ describe("POST /posts", () => {
 });
 
 describe("Test getTimeline", () => {
-  let newUser
-  let newToken
-  let redis
+  let newUser;
+  let newToken;
+  let redis;
   beforeAll(async () => {
-    redis = app.locals.redis
+    redis = app.locals.redis;
     // Create a new user which will also create posts
     newUser = await prisma.user.create({
-      data: { username: USERNAME + "new",
-         password: PASSWORD,
-          email: EMAIL + "new" },
-      });
+      data: {
+        username: USERNAME + "new",
+        password: PASSWORD,
+        email: EMAIL + "new",
+      },
+    });
 
     newToken = jwt.sign(
       { id: newUser.id, username: newUser.username },
       process.env.JWT_SECRET,
       { expiresIn: "15m" },
     );
-
 
     await prisma.post.createMany({
       data: [
@@ -85,12 +86,14 @@ describe("Test getTimeline", () => {
       ],
     });
 
-    const allPosts = await prisma.post.findMany({ where: { authorId: newUser.id } });
+    const allPosts = await prisma.post.findMany({
+      where: { authorId: newUser.id },
+    });
     const ts = Date.now();
     for (const [i, post] of allPosts.entries()) {
       await redis.zadd(`user:posts:${newUser.id}`, ts + i, post.id);
     }
-  })
+  });
   // Create multiple posts
   it("should return posts from Redis in descending order", async () => {
     const res = await sendAuthorizedRequest(
@@ -104,32 +107,49 @@ describe("Test getTimeline", () => {
     expect(res.body.posts).toHaveLength(3);
 
     const postTexts = res.body.posts.map((p) => p.text);
-    expect(postTexts).toEqual(expect.arrayContaining(["Post A", "Post B", "Post C"]));
+    expect(postTexts).toEqual(
+      expect.arrayContaining(["Post A", "Post B", "Post C"]),
+    );
   });
 
   it("Should return posts without redis caching in descending order", async () => {
     await redis.del(REDIS_POST_PATH + newUser.id);
-    const res = await sendAuthorizedRequest("POST", "/posts/timeline", newToken, "")
+    const res = await sendAuthorizedRequest(
+      "POST",
+      "/posts/timeline",
+      newToken,
+      "",
+    );
     expect(res.statusCode).toBe(201);
     expect(res.body.posts).toBeDefined();
     expect(res.body.posts).toHaveLength(3);
-  })
+  });
 
-  it("Should only return 2 element with limit specified", async() => {
-    const res = await sendAuthorizedRequest("POST", "/posts/timeline?limit=2", newToken, "")
+  it("Should only return 2 element with limit specified", async () => {
+    const res = await sendAuthorizedRequest(
+      "POST",
+      "/posts/timeline?limit=2",
+      newToken,
+      "",
+    );
     expect(res.statusCode).toBe(201);
     expect(res.body.posts).toBeDefined();
     expect(res.body.posts).toHaveLength(2);
-  })
+  });
 
-  it("Should throw an error with an invalid redis", async() => {
+  it("Should throw an error with an invalid redis", async () => {
     // Break redis
-    const storedRedis = app.locals.redis
-    app.locals.redis = undefined
-    const res = await sendAuthorizedRequest("POST", "/posts/timeline?limit=INVALID", newToken, "")
+    const storedRedis = app.locals.redis;
+    app.locals.redis = undefined;
+    const res = await sendAuthorizedRequest(
+      "POST",
+      "/posts/timeline?limit=INVALID",
+      newToken,
+      "",
+    );
     expect(res.statusCode).toBe(500);
 
     // Restore redis for shutdown
-    app.locals.redis = storedRedis
-  })
-})
+    app.locals.redis = storedRedis;
+  });
+});

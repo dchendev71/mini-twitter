@@ -3,7 +3,7 @@ import {
   createUsersAndReturnAccessTokens,
   sendAuthorizedRequest,
 } from "./testsUtils.js";
-import { app } from "./setupTests.js"
+import { app } from "./setupTests.js";
 import request from "supertest";
 
 let users;
