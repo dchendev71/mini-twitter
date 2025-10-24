@@ -133,7 +133,7 @@ describe("Follow routes", () => {
     }
   });
 
-  it("should list all followers", async () => {
+  it("should list all user[0]'s follow", async () => {
     const user = users[0]["user"];
     const res = await request(app).get(`/follow/${user.id}/following`);
 
@@ -141,7 +141,7 @@ describe("Follow routes", () => {
     expect(res.body).toHaveLength(USER_COUNT - 1);
   });
 
-  it("should list all followee", async () => {
+  it("should list all user[0]'s followers (0)", async () => {
     const user = users[0]["user"];
     const res = await request(app).get(`/follow/${user.id}/followers`);
 
