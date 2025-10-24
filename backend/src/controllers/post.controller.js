@@ -1,7 +1,6 @@
 import prisma from "../prismaClient.js";
 import logger from "../utils/logger.js";
-
-const REDIS_POST_PATH = "user:posts:";
+import { REDIS_POST_PATH } from "../redisClient.js";
 
 async function createPost(req, res) {
   try {
@@ -85,4 +84,4 @@ async function getTimeline(req, res) {
     return res.status(500).json({ error: "Could not fetch timeline" });
   }
 }
-export { createPost, getTimeline, REDIS_POST_PATH };
+export { createPost, getTimeline };

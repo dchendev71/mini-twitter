@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import request from "supertest";
 import { USERNAME, PASSWORD, EMAIL } from "./setupTests.js";
 import { clearDatabase, sendAuthorizedRequest } from "./testsUtils.js";
-import { REDIS_POST_PATH } from "../src/controllers/post.controller.js";
+import { REDIS_POST_PATH } from "../src/redisClient.js";
 
 let token;
 let user;
