@@ -87,9 +87,7 @@ async function getFollowers(req, res) {
     listPath: REDIS_FOLLOWERS_PATH + userId,
     dbReq: { where: {  followeeId: userId }, include: { follower: true}}
   }
-  return res.status(201).json(
-    await getList(params, (f) => f.follower)
-  )
+  return res.status(201).json(await getList(params, (f) => f.follower))
 }
 
 async function getFollowing(req, res) {
@@ -99,9 +97,7 @@ async function getFollowing(req, res) {
     listPath: REDIS_FOLLOWING_PATH + userId,
     dbReq: { where: {  followerId: userId }, include: { followee: true}}
   }
-  return res.status(201).json(
-    await getList(params, (f) => f.followee)
-  )
+  return res.status(201).json(await getList(params, (f) => f.followee))
 }
 
 export { unfollow, follow, getFollowers, getFollowing };
