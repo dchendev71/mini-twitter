@@ -3,8 +3,10 @@ import Redis from "ioredis";
 let redisInstance = null;
 
 export const REDIS_POST_PATH = "user:posts:";
-export const REDIS_FOLLOWERS_PATH = "user:followers:";
-export const REDIS_FOLLOWING_PATH = "user:followees:";
+export const REDIS_FOLLOWERS_PATH = "followers:";
+export const REDIS_FOLLOWING_PATH = "followees:";
+export const REDIS_POST_LIKES_PATH = "post:likes:";
+export const REDIS_USER_LIKED_POSTS_PATH = "user:liked:";
 
 export function getRedis() {
   if (!redisInstance) {

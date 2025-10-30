@@ -47,6 +47,13 @@ async function sendDeleteAuthorizedRequest(route, token, text) {
     .send({ content: text });
 }
 
+async function sendGetAuthorizedRequest(route, token, text) {
+  return await request(app)
+    .get(route)
+    .set("Authorization", `Bearer ${token}`)
+    .send({ content: text })
+}
+
 async function sendAuthorizedRequest(method, route, token, text) {
   switch (method) {
     case "POST":
@@ -54,7 +61,7 @@ async function sendAuthorizedRequest(method, route, token, text) {
     case "DELETE":
       return sendDeleteAuthorizedRequest(route, token, text);
     case "GET":
-      throw new Error("Not Implemented");
+      return sendGetAuthorizedRequest(route, token, text)
     case "UPDATE":
       throw new Error("Not Implemented");
   }
