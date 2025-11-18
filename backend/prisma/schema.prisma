@@ -30,10 +30,13 @@ model Post {
   retweetOfId   Int? 
   retweetOf     Post?    @relation("PostRetweets", fields: [retweetOfId], references: [id])
   retweets      Post[]   @relation("PostRetweets") // inverse side
-  likesCount    Int      @default(0)
   retweetsCount Int      @default(0)
   createdAt     DateTime @default(now())
   likes         Like[]
+  commentOfId Int?
+  commentOf   Post?   @relation("PostComments", fields: [commentOfId], references: [id])
+  comments    Post[]  @relation("PostComments")
+
 
   @@index([authorId, createdAt])
   @@unique([authorId, retweetOfId])

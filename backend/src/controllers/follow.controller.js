@@ -29,7 +29,7 @@ async function follow(req, res) {
         .status(400)
         .json({ message: "can not follow same person twice" });
     }
-    logger.error(err);
+    logger.error("Unable to follow:", err);
     return res.status(500).json({ message: "failed to follow" });
   }
 }
@@ -55,7 +55,7 @@ async function unfollow(req, res) {
     }
     return res.status(201).json({ message: "unfollow succesful" });
   } catch (err) {
-    logger.error(err);
+    logger.error("Unable to unfollow:", err);
     return res.status(500).json({ message: "failed to unfollow" });
   }
 }

@@ -26,7 +26,7 @@ async function likePost(req, res) {
 
         return res.status(201).json({ message: "Post liked" })
     } catch (err) {
-        logger.error(err);
+        logger.error("Unable to like post:", err);
         return res.status(500).json({ message: "Failed to like post"})
     }
 }
@@ -49,7 +49,7 @@ async function unlikePost(req, res) {
         if (err.code === "P2025") {
             return res.status(400).json({ message: "Can not unlike if not liked before"})
         }
-        logger.error(err)
+        logger.error("Unable to unlike post:", err)
         return res.status(500).json({ message: "Failed to unlike post" })
     }
 }
@@ -75,7 +75,7 @@ async function getLikes(req, res) {
         }
         return res.status(200).json({ likes: count, liked: !!liked });
     } catch (err) {
-        logger.error(err)
+        logger.error("Unable to get likes:", err)
         return res.status(500).json({ message: "Failed to get likes" })
     }
 }
