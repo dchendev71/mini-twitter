@@ -7,7 +7,7 @@ async function addComment(req, res) {
     try {
         const userId = req.user.id
         const postId = parseInt(req.params.postId, 10)
-        const text = req.body
+        const text = req.body ? req.body.content : undefined
         const redis = req.app.locals.redis
 
         if (!text || text.trim() === "") {

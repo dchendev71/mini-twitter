@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.routes.js";
 import postRoutes from "./src/routes/posts.routes.js";
 import followRoutes from "./src/routes/follow.routes.js";
+import commentRoutes from "./src/routes/comment.routes.js"
 
 import { authenticateToken } from "./src/middleware/auth.middleware.js";
 
@@ -19,6 +20,7 @@ export default function createApp({ redis, fanoutQueue, fanoutWorker }) {
   app.use("/auth", authRoutes);
   app.use("/posts", postRoutes);
   app.use("/follow", followRoutes);
+  app.use("/comment", commentRoutes);
 
   // Example protected route
   app.get("/profile", authenticateToken, (req, res) => {
