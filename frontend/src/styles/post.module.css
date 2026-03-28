@@ -1,0 +1,178 @@
+.post {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 1px solid #2f3336;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.post:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+.avatarCol {
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1d9bf0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.name {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #e7e9ea;
+}
+
+.dot {
+  color: #71767b;
+  font-size: 0.875rem;
+}
+
+.time {
+  color: #71767b;
+  font-size: 0.875rem;
+}
+
+.text {
+  color: #e7e9ea;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin: 0.125rem 0 0.5rem;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.actions {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: #71767b;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.action:hover {
+  color: #1d9bf0;
+  background: rgba(29,155,240,0.1);
+}
+
+.action.liked {
+  color: #f91880;
+}
+
+.action.liked:hover {
+  color: #f91880;
+  background: rgba(249,24,128,0.1);
+}
+
+/* Comments */
+.comments {
+  margin-top: 0.75rem;
+  border-top: 1px solid #2f3336;
+  padding-top: 0.75rem;
+}
+
+.comment {
+  padding: 0.4rem 0;
+  font-size: 0.875rem;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.commentAuthor {
+  color: #1d9bf0;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.commentText {
+  color: #e7e9ea;
+}
+
+.loadingText, .noComments {
+  color: #71767b;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.commentForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.commentForm input {
+  background: #202327;
+  border: 1px solid #2f3336;
+  border-radius: 9999px;
+  color: #e7e9ea;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  flex: 1;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.commentForm input:focus {
+  border-color: #1d9bf0;
+}
+
+.commentForm input::placeholder {
+  color: #71767b;
+}
+
+.commentForm button {
+  background: transparent;
+  border: 1px solid #1d9bf0;
+  border-radius: 9999px;
+  color: #1d9bf0;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 0.4rem 0.875rem;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.commentForm button:hover:not(:disabled) {
+  background: rgba(29,155,240,0.1);
+}
+
+.commentForm button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
