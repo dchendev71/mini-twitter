@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { getRedis } from "../redisClient";
+import { getRedis } from "../redisClient.js";
 
 let workerInstance = null;
 

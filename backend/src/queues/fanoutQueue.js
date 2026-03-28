@@ -1,5 +1,5 @@
 import { Queue } from "bullmq";
-import { getRedis } from "../redisClient";
+import { getRedis } from "../redisClient.js";
 
 let queueInstance = null;
 
