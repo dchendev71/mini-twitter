@@ -44,6 +44,28 @@ async function createPost(req, res) {
   }
 }
 
+async function searchPosts(req, res) {
+  if (!req.query) {
+    return res.status(403).json({ message: "Invalid parameters"})
+  }
+  const query = req.query['q']
+  if (typeof(query) !== "string" || query.trim() === "") {
+    return res.status(403).json({ message: "Empty search parameters"})
+  }
+  const posts = await prisma.post.findMany({
+    where: {
+      text: {
+        contains: query,
+        mode: "insensitive"
+      },
+    },
+    include: { author: true },
+    orderBy: { createdAt: "desc" },
+  })
+
+  return res.status(200).json(posts)
+}
+
 async function getTimeline(req, res) {
   try {
     const userId = req.user.id;
@@ -84,4 +106,4 @@ async function getTimeline(req, res) {
     return res.status(500).json({ error: "Could not fetch timeline" });
   }
 }
-export { createPost, getTimeline };
+export { createPost, getTimeline, searchPosts };

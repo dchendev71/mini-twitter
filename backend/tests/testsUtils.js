@@ -51,7 +51,6 @@ async function sendGetAuthorizedRequest(route, token, text) {
   return await request(app)
     .get(route)
     .set("Authorization", `Bearer ${token}`)
-    .send({ content: text })
 }
 
 async function sendAuthorizedRequest(method, route, token, text) {

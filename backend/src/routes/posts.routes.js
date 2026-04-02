@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createPost, getTimeline } from "../controllers/post.controller.js";
+import { createPost, searchPosts, getTimeline } from "../controllers/post.controller.js";
 import { authenticateToken } from "../middleware/auth.middleware.js";
 import { getLikes, likePost, unlikePost } from "../controllers/like.controller.js";
 
@@ -7,6 +7,7 @@ const router = Router();
 
 router.post("/", authenticateToken, createPost);
 router.post("/timeline", authenticateToken, getTimeline);
+router.get("/search", authenticateToken, searchPosts);
 
 router.post("/:postId/like", authenticateToken, likePost);
 router.delete("/:postId/like", authenticateToken, unlikePost);
