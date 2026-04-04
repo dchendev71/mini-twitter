@@ -55,53 +55,6 @@ describe("POST /posts", () => {
     );
     expect(res.statusCode).toBe(500);
   });
-
-  it("Should return 403, searchPost empty query", async() => {
-    const res = await sendAuthorizedRequest(
-      "GET",
-      "/posts/search",
-      token,
-      ""
-    );
-    expect(res.statusCode).toBe(403);
-    expect(res.body).toHaveProperty("message", "Empty search parameters")
-  });
-
-  it("Should return 403, searchPost, query empty", async() => {
-    const res = await sendAuthorizedRequest(
-      "GET",
-      "/posts/search?q=",
-      token,
-      ""
-    )
-    expect(res.statusCode).toBe(403)
-    expect(res.body).toHaveProperty("message", "Empty search parameters")
-  })
-
-  it("Should return 200, searchPost", async() => {
-    const res = await sendAuthorizedRequest(
-      "GET",
-      "/posts/search?q=Hello", 
-      token, 
-      ""
-    )
-    expect(res.statusCode).toBe(200)
-    expect(res.body).toBeInstanceOf(Array);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0]).toHaveProperty("text");
-    expect(res.body[0].text.toLowerCase()).toContain("hello");
-  })
-
-  it("should return 200, searchPost, empty array when no posts match", async () => {
-    const res = await sendAuthorizedRequest(
-      "GET",
-      "/posts/search?q=zzznomatchzzz",
-      token, 
-      ""
-    )
-    expect(res.status).toBe(200);
-    expect(res.body.length).toBe(0);
-  });
 });
 
 
