@@ -5,6 +5,6 @@ import { authenticateToken } from "../middleware/auth.middleware.js";
 const router = Router();
 
 router.get("/:postId/", authenticateToken, getComments);
-router.post("/:postId/", authenticateToken, addComment)
+router.post("/:postId/", authenticateToken, addComment);
 
 export default router;

@@ -6,6 +6,7 @@ import styles from "../styles/layout.module.css";
 export default function MainLayout() {
   const { user, logout } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("home");
+  const [searchQuery, setSearchQuery] = useState("Search")
 
   const navItems = [
     { id: "home", label: "Home", icon: HomeIcon },
@@ -80,7 +81,10 @@ export default function MainLayout() {
           <span className={styles.searchIcon}>
             <SearchIcon />
           </span>
-          <input placeholder="Search" disabled />
+          <input placeholder="Search"
+          value={searchQuery}
+          onChange={(e => setSearchQuery(e.target.value))} 
+          />
         </div>
         <div className={styles.whoToFollow}>
           <h3>Who to follow</h3>

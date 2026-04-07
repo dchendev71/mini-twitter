@@ -9,7 +9,6 @@ export const REDIS_POST_LIKES_PATH = "post:likes:";
 export const REDIS_USER_LIKED_POSTS_PATH = "user:liked:";
 export const REDIS_POST_COMMENTS_PATH = "post:comments:";
 
-
 export function getRedis() {
   if (!redisInstance) {
     redisInstance = new Redis({

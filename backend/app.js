@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 import authRoutes from "./src/routes/auth.routes.js";
 import postRoutes from "./src/routes/posts.routes.js";
 import followRoutes from "./src/routes/follow.routes.js";
-import commentRoutes from "./src/routes/comment.routes.js"
-import searchRoutes from "./src/routes/search.routes.js"
+import commentRoutes from "./src/routes/comment.routes.js";
+import searchRoutes from "./src/routes/search.routes.js";
 
 import { authenticateToken } from "./src/middleware/auth.middleware.js";
 

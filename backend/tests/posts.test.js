@@ -57,7 +57,6 @@ describe("POST /posts", () => {
   });
 });
 
-
 describe("Test getTimeline", () => {
   let newUser;
   let newToken;
